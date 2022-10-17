@@ -3,6 +3,7 @@ package com.springsecurity.bootsecurity.config;
 import com.springsecurity.bootsecurity.service.MyUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,10 +24,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    protected void configure (AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(myUserDetailService)
-                .passwordEncoder(getPasswordEncoder());
+//    protected void configure (AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(myUserDetailService)
+//                .passwordEncoder(getPasswordEncoder());
+//
+//    }
 
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(getPasswordEncoder());
+        daoAuthenticationProvider.setUserDetailsService(myUserDetailService);
+        return daoAuthenticationProvider;
     }
 
         @Override
@@ -37,10 +46,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/info").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/registration", "/login", "/error").permitAll()
-                //.antMatchers("/list").hasRole("ADMIN")
-                //.anyRequest().authenticated()
+                .antMatchers("/list").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                .formLogin().successHandler(successUserHandler)
+                .formLogin()//.successHandler(successUserHandler)
                 .permitAll()
                 .and()
                 .logout()

@@ -2,6 +2,7 @@ package com.springsecurity.bootsecurity.dao;
 
 
 
+import com.springsecurity.bootsecurity.model.Role;
 import com.springsecurity.bootsecurity.model.User;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -28,9 +31,14 @@ public class UserDAOImp implements UserDAO {
 
     @Override
     public void add(User user) {
+
+        List<Role> role = new ArrayList();
+        Role role1 = new Role(user.getUsername(), "ROLE_USER") ;
+        role.add(role1);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        //user.setRole("ROLE_USER");
+        user.setRoles(role);
         entityManager.persist(user);
+        //entityManager.persist(role1);
     }
 
     @Override
@@ -45,14 +53,30 @@ public class UserDAOImp implements UserDAO {
     }
 
     @Override
-    public User getUser(int id) {
+    public User getUserId(int id) {
         User user = entityManager.find(User.class, id);
         return user;
+    }
+    @Override
+    public User getUser(String username) {
+        User user = entityManager.find(User.class, username);
+        return user;
+    }
+
+    public Role getListRoles(String username) {
+        Role role = entityManager.find(Role.class, username);
+        return role;
     }
 
     public void deleteUser(int id) {
         User user = this.entityManager.find(User.class, id);
         this.entityManager.remove(user);
+    }
+
+    @Override
+    public List<Role> listRoles(String username) {
+        User user = entityManager.find(User.class, username);
+        return user.getRoles();
     }
 }
 

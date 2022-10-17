@@ -4,6 +4,7 @@ package com.springsecurity.bootsecurity.dao;
 
 
 
+import com.springsecurity.bootsecurity.model.Role;
 import com.springsecurity.bootsecurity.model.User;
 
 import java.util.List;
@@ -13,7 +14,12 @@ public interface UserDAO {
     void save(User user);
 
      List<User> listUsers();
-     User getUser(int id);
+
+    User getUserId(int id);
+
+    User getUser(String username);
 
     void deleteUser(int id);
+
+    List<Role> listRoles(String username);
 }

@@ -3,7 +3,7 @@ package com.springsecurity.bootsecurity.service;
 
 import com.springsecurity.bootsecurity.model.User;
 import com.springsecurity.bootsecurity.repository.UsersRepository;
-import com.springsecurity.bootsecurity.security.MyUserDetailes;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,7 +26,6 @@ public class MyUserDetailService implements UserDetailsService {
         if (user.isEmpty()){
             throw new UsernameNotFoundException("User not found");
         }
-
-        return new MyUserDetailes(user.get(), user.get().getRole());
+        return new org.springframework.security.core.userdetails.User(user.get().getUsername(), user.get().getPassword(), user.get().getAuthorities());
     }
 }
