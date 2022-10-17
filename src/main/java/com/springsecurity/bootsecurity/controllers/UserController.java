@@ -24,12 +24,12 @@ import java.security.Principal;
 @RequestMapping("/")
 public class UserController {
     private final UserService userService;
-    private final MyUserDetailService detailsServiceService ;
+    //private final MyUserDetailService detailsServiceService ;
 
     @Autowired
-    public UserController(UserService userService, MyUserDetailService detailsServiceService, UserValidator userValidator) {
+    public UserController(UserService userService, UserValidator userValidator) {
         this.userService = userService;
-        this.detailsServiceService = detailsServiceService;
+       // this.detailsServiceService = detailsServiceService;
         this.userValidator = userValidator;
     }
 
