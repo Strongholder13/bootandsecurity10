@@ -9,9 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-
 import java.util.List;
 import java.util.Optional;
 
@@ -26,36 +23,36 @@ public class UserServiceImp implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Transactional
+
     @Override
     public void add(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         usersRepository.save(user);
     }
 
-    @Transactional
+
     @Override
     public void update(User user) {usersRepository.save(user); }
-    @Transactional(readOnly = true)
+
     @Override
     public List<User> listUsers() {
         return usersRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+
     @Override
     public User findById(int id) {
         Optional<User> user = usersRepository.findById(id);
         return user.orElse(null);
     }
 
-    @Transactional
+
     @Override
     public void delete(int id) {
         usersRepository.deleteById(id);
     }
 
-    @Transactional
+
     @Override
     public User findByUsername(String username) {
         Optional<User> user = usersRepository.findByUsername(username);
