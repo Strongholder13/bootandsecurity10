@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -22,7 +23,7 @@ public class Role implements GrantedAuthority, Serializable {
     @Column
     private String role;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "username", referencedColumnName = "username", insertable = false, updatable = false)
     private User user;
 
@@ -41,6 +42,18 @@ public class Role implements GrantedAuthority, Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Role role1)) return false;
+        return username.equals(role1.username) && role.equals(role1.role);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, role);
     }
 
     public void setUser(User user) {

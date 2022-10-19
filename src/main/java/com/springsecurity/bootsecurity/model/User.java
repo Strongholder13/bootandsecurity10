@@ -42,7 +42,7 @@ public class User implements UserDetails {
     private String password;
 
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Role.class, fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Role> roles;
 
 
@@ -51,8 +51,8 @@ public class User implements UserDetails {
          return roles;
     }
 
-    public User( @NonNull String username, String name, String surname, int age, @NonNull String password, List<Role> roles) {
-
+    public User(int Id, @NonNull String username, String name, String surname, int age, @NonNull String password, List<Role> roles) {
+        this.id = id;
         this.username = username;
         this.name = name;
         this.surname = surname;
@@ -72,14 +72,6 @@ public class User implements UserDetails {
     @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
-//        List<GrantedAuthority> authorities
-//                = new ArrayList<>();
-//        //List<Role> roles2 = roles.getRoles();
-//        for (Role role: roles) {
-//            authorities.add(new SimpleGrantedAuthority(role.getRole()));
-//        }
-//        return authorities;
-        // roles.stream().map(role -> new SimpleGrantedAuthority(role.getRole())).collect(Collectors.toList());
     }
 
     @Override
@@ -115,7 +107,7 @@ public class User implements UserDetails {
     @Override
     public String toString() {
         return "User{" +
-
+                ", id='" + id + '\'' +
                 ", username='" + username + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +

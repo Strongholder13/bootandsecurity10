@@ -1,8 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tags="http://www.springframework.org/security/tags">
 <head>
     <meta charset="UTF-8">
     <title>user info</title>
+  <div tags:authorize="isAuthenticated()">
+    Logged as: <b th:inline="text"> [[${#httpServletRequest.remoteUser}]] </b>
+    <form th:action="@{/logout}" method="POST">
+      <input type="submit" value="Logout"/>
+    </form>
+  </div>
 </head>
 <body>
 <h2>user information</h2>
@@ -35,10 +41,17 @@
     <th>Age</th>
     <td th:text="${user.age}"/>
 
+
+  <tr>
+    <th>Status</th>
+    <td th:text="${role}"/>
+
+  </tr>
+
   </tr>
   </tbody>
 </table>
 <br>
-<a href="/logout">Logout</a>
+
 </body>
 </html>

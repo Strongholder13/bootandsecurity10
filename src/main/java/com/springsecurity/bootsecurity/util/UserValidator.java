@@ -1,7 +1,7 @@
 package com.springsecurity.bootsecurity.util;
 
 import com.springsecurity.bootsecurity.model.User;
-import com.springsecurity.bootsecurity.service.MyUserDetailService;
+import com.springsecurity.bootsecurity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -10,11 +10,11 @@ import org.springframework.validation.Validator;
 @Component
 public class UserValidator implements Validator {
 
-    private final MyUserDetailService myUserDetailService;
+    private final UserService userService;
 
     @Autowired
-    public UserValidator(MyUserDetailService myUserDetailService) {
-        this.myUserDetailService = myUserDetailService;
+    public UserValidator(UserService userService) {
+        this.userService = userService;
     }
 
 
@@ -27,7 +27,7 @@ public class UserValidator implements Validator {
     public void validate(Object o, Errors errors) {
     User user = (User) o;
     try {
-        myUserDetailService.loadUserByUsername(user.getUsername());
+        userService.loadUserByUsername(user.getUsername());
     } catch (UsernameNotFoundException ignored) {
         return;
     }
