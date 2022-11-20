@@ -75,7 +75,7 @@ public class UserController {
     @PostMapping("/update")
     public String updateUser(@ModelAttribute("user") User user){
         userService.update(user);
-        return "redirect:/user";
+        return "redirect:/admin";
     }
     @PostMapping ("/delete")
     public String delete(@RequestParam("id") int id) {

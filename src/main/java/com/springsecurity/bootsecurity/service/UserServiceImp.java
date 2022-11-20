@@ -2,6 +2,7 @@ package com.springsecurity.bootsecurity.service;
 
 
 
+import com.springsecurity.bootsecurity.model.Role;
 import com.springsecurity.bootsecurity.model.User;
 import com.springsecurity.bootsecurity.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -27,12 +31,24 @@ public class UserServiceImp implements UserService {
     @Override
     public void add(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        List<Role> roly = new ArrayList<>();
+        roly.add(new Role(user.getUsername(), "ROLE_USER"));
+        user.setRoles(roly);
         usersRepository.save(user);
     }
 
 
     @Override
-    public void update(User user) {usersRepository.save(user); }
+    public void update(User user) {
+        User currentUser = usersRepository.findById(user.getId()).orElse(null);
+        if (currentUser.getPassword().equals(user.getPassword())){
+            usersRepository.save(user);
+        }
+        else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            usersRepository.save(user);
+        }
+    }
 
     @Override
     public List<User> listUsers() {
